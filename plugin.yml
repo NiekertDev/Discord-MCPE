@@ -8,4 +8,4 @@ api:
 - 3.0.0-ALPHA2
 - 3.0.0-ALPHA3
 - 3.0.0-ALPHA4
-
+main: Niekert\Discord\Main
