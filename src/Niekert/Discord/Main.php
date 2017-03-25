@@ -33,13 +33,12 @@ class Main extends PluginBase{
                 }
                 else {
                 
-                    $this->reloadConfig();
                     $data = array("content" => $message, "username" => "$username");
-                    $curl = curl_init("$webhook");
+                    $curl = curl_init($webhook);
                     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
                     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
                     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                    return curl_exec($curl);
+                    curl_exec($curl);
                     
                     // Let you know here!
                     $this->getLogger()->warning('Check your Discord Server now :)');
