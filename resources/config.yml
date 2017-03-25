@@ -1,4 +1,4 @@
 #Status plugin made by Niekert
-username: ""
-message: ""
+username: "" 
+message: "" #the message on startup
 webhook_url: ""
