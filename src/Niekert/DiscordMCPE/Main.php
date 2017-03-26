@@ -63,14 +63,14 @@ class Main extends PluginBase implements Listener{
 			$name = $event->getPlayer();
 			$player = $player->getName();
 			$playerjoindata = array("content" => $playerjoinopt, "username" => "$username");
-  	    $curl = curl_init();
-						curl_setopt($curl, CURLOPT_URL, $webhook);
-						curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($playerjoindata));
-						curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-						curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-						curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-						curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-						curl_exec($curl);
+  	            $curl = curl_init();
+				curl_setopt($curl, CURLOPT_URL, $webhook);
+				curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($playerjoindata));
+				curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+				curl_exec($curl);
 		}
 	}
 }
