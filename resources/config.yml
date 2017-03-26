@@ -1,4 +1,5 @@
 #Status plugin made by Niekert
-username: "" 
-message: "" #the message on startup
 webhook_url: ""
+username: ""
+message: "" #the message on startup
+join_message: "" #Message when player joins. $player can be used. Set to 0 to disable.
