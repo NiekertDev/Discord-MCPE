@@ -1,6 +1,6 @@
 name: Discord-MCPE
 author: Niekert
-version: "0.2.0"
+version: "0.2.5"
 api:
 - 2.0.0
 - 3.0.0
