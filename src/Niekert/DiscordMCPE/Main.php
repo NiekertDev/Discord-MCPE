@@ -42,7 +42,7 @@ class Main extends PluginBase{
                     curl_exec($curl);
                     
                     // Let you know here!
-                    $this->getLogger()->warning('Check your Discord Server now :)');
+                    $this->getLogger()->info('Check your Discord Server now :)');
                 
                 }
 	}
