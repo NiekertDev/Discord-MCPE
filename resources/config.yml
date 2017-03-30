@@ -6,3 +6,4 @@ shutdown_message: "" #Message when server stops
 join_message: "" #Message when player joins. $player can be used. Set to 0 to disable.
 quit_message: "" #Message when player leaves. $player can be used. Set to 0 to disable.
 death_message: "" #Message when player get killed. $player can be used. Set to 0 to disable.
+debug: "0"

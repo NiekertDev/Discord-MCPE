@@ -13,8 +13,9 @@ use pocketmine\event\Listener;
 
 class Main extends PluginBase implements Listener{
 	
+	public $error;
+	
 	function send($message, $username){
-		$debug = $this->getConfig()->get("debug");
 		$webhook = $this->getConfig()->get("webhook_url");
 		$data = array("content" => $message, "username" => "$username");
 			$curl = curl_init();
@@ -26,27 +27,15 @@ class Main extends PluginBase implements Listener{
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_exec($curl);
 			$response = curl_exec($curl);
-			curl_close($curl);
-						
-				if(!is_null($response)){
+				if(curl_exec($curl) === false){
+					$this->getLogger()->warning('Error: curl_error($curl)');
+				}
+				else{
 					$error = 0;
 				}
-				
-				elseif($debug == 1 AND !is_null($response)){
-					$this->getLogger()->warning('ERROR: $response');
-					$error = 1;
-				}
-				
-				elseif($debug == 0 AND !is_null($response)){
-					$this->getLogger()->warning('Something strange happened...');
-					$error = 1;
-				}
-				
-				else {
-					$error = 1;
-				}
+			curl_close($curl);
 	}
-					
+
 	public function onLoad(){
 		$this->getLogger()->info("Plugin loading");
 	}
@@ -57,27 +46,28 @@ class Main extends PluginBase implements Listener{
 		$this->getLogger()->info("Plugin enabled");
 		$this->reloadConfig();
 		$webhook = $this->getConfig()->get("webhook_url");
-		$username = $this->getConfig()->get("username");
+		$botusername = $this->getConfig()->get("username");
 		$startupopt = $this->getConfig()->get("start_message");
-                
-                // Statements
-                
-                if ($username === "") {
-                    $this->getLogger()->warning('Please set your username in config.yml');
-                }
-                elseif ($webhook === "") {
-                    $this->getLogger()->warning('Please set your webhook in config.yml');
-                }
-				elseif ($startupopt === "0") {
-				$event->setCancelled();
+		$shutdownopt = $this->getConfig()->get("shutdown_message");
+		$joinopt = $this->getConfig()->get("join_message");
+		$quitopt = $this->getConfig()->get("quit_message");
+		$deathopt = $this->getConfig()->get("death_message");
+		$error = 1;
+		
+			//I'm to lazy to set a message for all options :)
+				
+				if($webhook === "" OR $botusername === "" OR $startupopt === "" OR $shutdownopt === "" OR $joinopt === "" OR $quitopt === "" OR $deathopt === ""){
+					$this->getLogger()->warning('Please edit your config.yml');
+					$this->setEnabled(false);
 				}
-				elseif ($startupopt === "") {
-                    $this->getLogger()->warning('Please set your message in config.yml');
-                }
+                
                 else {
-					$this->send("$startupopt", "$username");
-					if ($error === 0) {
-						$this->getLogger()->warning('Check your Discord Server now :)');
+					$this->send($startupopt, $botusername);
+					if($error === 0){
+						$this->getLogger()->info('Check your Discord Server now :)');
+					}
+					
+					else{
 					}
 				}
 	}
@@ -85,11 +75,12 @@ class Main extends PluginBase implements Listener{
 	public function onDisable(){
         $this->getLogger()->info("Plugin Disabled");
 		$shutdownopt = $this->getConfig()->get("shutdown_message");
+		$botusername = $this->getConfig()->get("username");
 		if ($shutdownopt === "0") {
 			$event->setCancelled();
 		}
 		else {
-			$this->send("$shutdownopt", "$username");
+			$this->send("$shutdownopt", "$botusername");
 		}
     }
 
@@ -102,7 +93,7 @@ class Main extends PluginBase implements Listener{
 		else {
 			$temp = $event->getPlayer();
 			$player = $temp->getName();
-			$this->send("$playerjoinopt", "$username");
+			$this->send("$playerjoinopt", "$botusername");
 		}
 	}
 	
@@ -115,7 +106,7 @@ class Main extends PluginBase implements Listener{
 		else {
 			$temp = $event->getPlayer();
 			$player = $temp->getName();
-			$this->send("$playerquitopt", "$username");
+			$this->send("$playerquitopt", "$botusername");
 		}
 	}	
 	
@@ -128,7 +119,7 @@ class Main extends PluginBase implements Listener{
 		else {
 			$temp = $event->getPlayer();
 			$player = $temp->getName();
-			$this->send("$playerdeathopt", "$username");
+			$this->send("$playerdeathopt", "$botusername");
 		}
 	}	
 }
