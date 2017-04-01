@@ -12,29 +12,6 @@ use pocketmine\Server;
 use pocketmine\event\Listener;
 
 class Main extends PluginBase implements Listener{
-	
-	public $error;
-	
-	function send($message, $username){
-		$webhook = $this->getConfig()->get("webhook_url");
-		$data = array("content" => $message, "username" => "$username");
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, $webhook);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-			curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_exec($curl);
-			$response = curl_exec($curl);
-				if(curl_exec($curl) === false){
-					$this->getLogger()->warning('Error: curl_error($curl)');
-				}
-				else{
-					$error = 0;
-				}
-			curl_close($curl);
-	}
 
 	public function onLoad(){
 		$this->getLogger()->info("Plugin loading");
@@ -45,81 +22,88 @@ class Main extends PluginBase implements Listener{
 		$this->saveDefaultConfig();
 		$this->getLogger()->info("Plugin enabled");
 		$this->reloadConfig();
-		$webhook = $this->getConfig()->get("webhook_url");
-		$botusername = $this->getConfig()->get("username");
-		$startupopt = $this->getConfig()->get("start_message");
-		$shutdownopt = $this->getConfig()->get("shutdown_message");
-		$joinopt = $this->getConfig()->get("join_message");
-		$quitopt = $this->getConfig()->get("quit_message");
-		$deathopt = $this->getConfig()->get("death_message");
-		$error = 1;
-		
+		$this->webhook = $this->getConfig()->get("webhook_url");
+		$this->botusername = $this->getConfig()->get("username");
+		$this->startupopt = $this->getConfig()->get("start_message");
+		$this->shutdownopt = $this->getConfig()->get("shutdown_message");
+		$this->joinopt = $this->getConfig()->get("join_message");
+		$this->quitopt = $this->getConfig()->get("quit_message");
+		$this->deathopt = $this->getConfig()->get("death_message");
+		$this->debugopt = $this->getConfig()->get("debug");
+
 			//I'm to lazy to set a message for all options :)
 				
-				if($webhook === "" OR $botusername === "" OR $startupopt === "" OR $shutdownopt === "" OR $joinopt === "" OR $quitopt === "" OR $deathopt === ""){
+				if($this->webhook === "" OR $this->botusername === "" OR $this->startupopt === "" OR $this->shutdownopt === "" OR $this->joinopt === "" OR $this->quitopt === "" OR $this->deathopt === ""){
 					$this->getLogger()->warning('Please edit your config.yml');
 					$this->setEnabled(false);
+					$this->enabled = "0";
+					return;
 				}
                 
-                else {
-					$this->send($startupopt, $botusername);
-					if($error === 0){
-						$this->getLogger()->info('Check your Discord Server now :)');
-					}
-					
-					else{
-					}
+				elseif($this->startupopt !== "0"){
+					$this->send($this->startupopt, $this->botusername);
+						if($this->error === "0"){
+							$this->getLogger()->info('Check your Discord Server now :)');
+						}
 				}
 	}
 	
 	public function onDisable(){
         $this->getLogger()->info("Plugin Disabled");
-		$shutdownopt = $this->getConfig()->get("shutdown_message");
-		$botusername = $this->getConfig()->get("username");
-		if ($shutdownopt === "0") {
-			$event->setCancelled();
-		}
-		else {
-			$this->send("$shutdownopt", "$botusername");
+		if($this->enabled !== "0")
+			return;
+		elseif($this->shutdownopt !== "0"){
+			$this->send($this->shutdownopt, $this->botusername);
 		}
     }
 
 	public function onJoin(PlayerJoinEvent $event){
-		$playerjoinopt = $this->getConfig()->get("join_message");
-		if ($playerjoinopt === "0") {
-			$event->setCancelled();
-		}
-		
-		else {
-			$temp = $event->getPlayer();
-			$player = $temp->getName();
-			$this->send("$playerjoinopt", "$botusername");
+		$temp1 = $event->getPlayer();
+		$player = $temp1->getName();
+		if($this->joinopt !== "0"){
+			$this->send(str_replace("{player}","$player","$this->joinopt"), $this->botusername);
 		}
 	}
-	
+
 	public function onQuit(PlayerQuitEvent $event){
-		$playerquitopt = $this->getConfig()->get("quit_message");
-		if ($playerquitopt === "0") {
-			$event->setCancelled();
-		}
-		
-		else {
-			$temp = $event->getPlayer();
-			$player = $temp->getName();
-			$this->send("$playerquitopt", "$botusername");
+		$temp2 = $event->getPlayer();
+		$player = $temp2->getName();
+		if($this->quitopt !== "0"){
+			$this->send(str_replace("{player}","$player","$this->quitopt"), $this->botusername);
 		}
 	}	
-	
+
 	public function onDeath(PlayerDeathEvent $event){
-		$playerddeathopt = $this->getConfig()->get("death_message");
-		if ($playerdeathopt === "0") {
-			$event->setCancelled();
+		$temp3 = $event->getEntity();
+		$player = $temp3->getName();
+		if($this->joinopt !== "0"){
+			$this->send(str_replace("{player}","$player","$this->deathopt"), $this->botusername);
 		}
-		
-		else {
-			$temp = $event->getPlayer();
-			$player = $temp->getName();
-			$this->send("$playerdeathopt", "$botusername");
-		}
-	}	
+	}
+
+	function send($message, $username){
+		$data = array("content" => $message, "username" => "$username");
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, $this->webhook);
+			curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+			curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+			$response = curl_exec($curl);
+			$curlerror = curl_error($curl);
+			
+				if($response === false AND $this->debugopt === "1"){
+					$this->getLogger()->warning('ERROR: ' .$curlerror);
+				}
+				
+				elseif($response === false AND $this->debugopt === "0"){
+					$this->getLogger()->warning('Something strange happened :(. Set the debug option in the config to 1 to show the error.');
+				}
+				
+				elseif($response === ""){
+					$error = "0";
+				}
+			$this->error = $error;
+	}
 }
