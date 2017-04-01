@@ -36,7 +36,6 @@ class Main extends PluginBase implements Listener{
 				if($this->webhook === "" OR $this->botusername === "" OR $this->startupopt === "" OR $this->shutdownopt === "" OR $this->joinopt === "" OR $this->quitopt === "" OR $this->deathopt === ""){
 					$this->getLogger()->warning('Please edit your config.yml');
 					$this->setEnabled(false);
-					$this->enabled = "0";
 					return;
 				}
                 
@@ -50,9 +49,7 @@ class Main extends PluginBase implements Listener{
 	
 	public function onDisable(){
         $this->getLogger()->info("Plugin Disabled");
-		if($this->enabled !== "0")
-			return;
-		elseif($this->shutdownopt !== "0"){
+		if($this->shutdownopt !== "0" AND $this->webhook !== "" AND $this->botusername !== "" AND $this->startupopt !== ""){
 			$this->send($this->shutdownopt, $this->botusername);
 		}
     }
