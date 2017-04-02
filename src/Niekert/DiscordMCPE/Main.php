@@ -57,7 +57,7 @@ class Main extends PluginBase implements Listener{
 	public function onJoin(PlayerJoinEvent $event){
 		$temp1 = $event->getPlayer();
 		$player = $temp1->getName();
-		if($this	->joinopt !== "0"){
+		if($this->joinopt !== "0"){
 			$this->send(str_replace("{player}","$player","$this->joinopt"), $this->botusername);
 		}
 	}
