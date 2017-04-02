@@ -57,7 +57,7 @@ class Main extends PluginBase implements Listener{
 	public function onJoin(PlayerJoinEvent $event){
 		$temp1 = $event->getPlayer();
 		$player = $temp1->getName();
-		if($this->joinopt !== "0"){
+		if($this	->joinopt !== "0"){
 			$this->send(str_replace("{player}","$player","$this->joinopt"), $this->botusername);
 		}
 	}
@@ -92,10 +92,12 @@ class Main extends PluginBase implements Listener{
 			
 				if($response === false AND $this->debugopt === "1"){
 					$this->getLogger()->warning('ERROR: ' .$curlerror);
+					$error = "1";
 				}
 				
 				elseif($response === false AND $this->debugopt === "0"){
 					$this->getLogger()->warning('Something strange happened :(. Set the debug option in the config to 1 to show the error.');
+					$error = "1";
 				}
 				
 				elseif($response === ""){
