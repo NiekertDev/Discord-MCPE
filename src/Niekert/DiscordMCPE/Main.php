@@ -38,7 +38,7 @@ class Main extends PluginBase implements Listener{
 					$this->setEnabled(false);
 					return;
 				}
-                
+
 				elseif($this->startupopt !== "0"){
 					$this->send($this->startupopt, $this->botusername);
 						if($this->error === "0"){
