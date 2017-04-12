@@ -1,9 +1,14 @@
 #Status plugin made by Niekert. SO to Thunder33345 for helping with small things.
 webhook_url: "" #Your webhook url.
 username: "" #The username the plugin uses.
+
+#Messages
 start_message: "" #Message when server starts. Set to 0 to disable.
 shutdown_message: "" #Message when server stops. Set to 0 to disable.
 join_message: "" #Message when player joins. {player} can be used. Set to 0 to disable.
 quit_message: "" #Message when player leaves. {player} can be used. Set to 0 to disable.
 death_message: "" #Message when player get killed. {player} can be used. Set to 0 to disable.
+
+#Options
+command: "1" #Command option. Set to 0 to disable.
 debug: "0"
