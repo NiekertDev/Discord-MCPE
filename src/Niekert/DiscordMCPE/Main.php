@@ -90,7 +90,7 @@ class Main extends PluginBase implements Listener{
 				}
 				else{
 					$sendername = $sender->getName();
-					$this->send($args[0], $sendername);
+					$this->send($args, $sendername);
 					if($this->error === "0"){;
 						$sender->sendMessage(TextFormat::GREEN."Discord message was send.");
 					}
