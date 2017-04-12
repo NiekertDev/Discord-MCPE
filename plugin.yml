@@ -8,4 +8,16 @@ api:
 - 3.0.0-ALPHA2
 - 3.0.0-ALPHA3
 - 3.0.0-ALPHA4
+- 3.0.0-ALPHA5
 main: Niekert\DiscordMCPE\Main
+
+commands:
+    discord:
+        description: Send an message to Discord!
+        permission: discord.send
+        usage: /discord MESSAGE
+        aliases: [dc]
+
+permissions:
+    discord.send:
+        default: op
