@@ -24,26 +24,9 @@ class Main extends PluginBase implements Listener{
 		$this->getServer()->getPluginManager()->registerEvents($this,$this);
 		$this->saveDefaultConfig();
 		$this->getLogger()->info(TextFormat::GREEN."Plugin enabled");
-		$this->reloadConfig();
-		$this->webhook = $this->getConfig()->get("webhook_url");
-		$this->botusername = $this->getConfig()->get("username");
-		$this->startupopt = $this->getConfig()->get("start_message");
-		$this->shutdownopt = $this->getConfig()->get("shutdown_message");
-		$this->joinopt = $this->getConfig()->get("join_message");
-		$this->quitopt = $this->getConfig()->get("quit_message");
-		$this->deathopt = $this->getConfig()->get("death_message");
-		$this->debugopt = $this->getConfig()->get("debug");
-		$this->commandopt = $this->getConfig()->get("command");
-
-			//I'm to lazy to set a message for all options :)
-				
-				if($this->webhook === "" OR $this->botusername === "" OR $this->startupopt === "" OR $this->shutdownopt === "" OR $this->joinopt === "" OR $this->quitopt === "" OR $this->deathopt === ""){
-					$this->getLogger()->warning(TextFormat::RED.'Please edit your config.yml');
-					$this->setEnabled(false);
-					return;
-				}
-
-				elseif($this->startupopt !== "0"){
+		$this->setvars();
+		
+				if($this->startupopt !== "0"){
 					$this->send($this->startupopt, $this->botusername);
 						if($this->error === "0"){
 							$this->getLogger()->info(TextFormat::GREEN.'Check your Discord Server now :)');
@@ -89,12 +72,12 @@ class Main extends PluginBase implements Listener{
 					$sender->sendMessage(TextFormat::RED."Please provide an argument! Usage: /discord (message).");
 				}
 				else{
-					$sendername = $sender->getName();
-					$this->send($args[0], $sendername);
-					if($this->error === "0"){;
+					$format = str_replace(array('{player}', '{message}'), array($sender->getName(), implode(" ", $args)), $this->commandformatopt);
+					$this->send($format, $this->chatuser, $this->chaturl);
+					if($this->error === "0"){
 						$sender->sendMessage(TextFormat::GREEN."Discord message was send.");
 					}
-					else{
+					elseif($this->error === "1"){
 						$sender->sendMessage(TextFormat::RED."Discord message wasn't send.");
 					}
 				}
@@ -105,11 +88,49 @@ class Main extends PluginBase implements Listener{
 		}
 	return true;
 	}
+	
+	function setvars(){
+		$this->reloadConfig();
+		$this->webhook = $this->getConfig()->get("webhook_url");
+		$this->botusername = $this->getConfig()->get("username");
+		$this->startupopt = $this->getConfig()->get("start_message");
+		$this->shutdownopt = $this->getConfig()->get("shutdown_message");
+		$this->joinopt = $this->getConfig()->get("join_message");
+		$this->quitopt = $this->getConfig()->get("quit_message");
+		$this->deathopt = $this->getConfig()->get("death_message");
+		$this->debugopt = $this->getConfig()->get("debug");
+		$this->commandopt = $this->getConfig()->get("command");
+		$this->chaturlopt = $this->getConfig()->get("chat_url");
+		$this->commandformatopt = $this->getConfig()->get("command_format");
+		
+			//Some statements
+			//I'm to lazy to set a message for all options :)
+			if($this->webhook === "" OR $this->botusername === "" OR $this->startupopt === "" OR $this->shutdownopt === "" OR $this->joinopt === "" OR $this->quitopt === "" OR $this->deathopt === "" OR $this->getConfig()->get("chat_url") === "" OR $this->getConfig()->get("chat_username") === ""){
+				$this->getLogger()->warning(TextFormat::RED.'Please edit your config.yml');
+				$this->setEnabled(false);
+				return;
+			}
+			if($this->getConfig()->get("chat_username") === "0"){
+				$this->chatuser = $this->botusername;
+			}
+			elseif($this->getConfig()->get("chat_username") !== "0"){
+				$this->chatuser = $this->getConfig()->get("chat_username");
+			}
+			if($this->getConfig()->get("chat_url") === "0"){
+				$this->chaturl = $this->webhook;
+			}
+			elseif($this->getConfig()->get("chat_url") !== "0"){
+				$this->chaturl = $this->getConfig()->get("chat_url");
+			}
+	}
 
-	function send($message, $username){
+	function send($message, $username, $webhook = ""){
+		if($webhook === ""){
+			$webhook = $this->webhook;
+		}
 		$data = array("content" => $message, "username" => "$username");
 			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, $this->webhook);
+			curl_setopt($curl, CURLOPT_URL, $webhook);
 			curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
 			curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
