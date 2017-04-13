@@ -15,4 +15,5 @@ chat_format: "[{player}] {message}" #Format the plugin uses when someone says so
 #Options
 command: "1" #Command option. Set to 0 to disable.
 chat_prefix: "!" #Prefix for chat. Set to 0 to disable.
-debug: "0"
+chat: "0" #Send everything to Discord. EXTREMELY NOT RECOMMENDED! Set to 0 to disable, set to 1 to enable.
+debug: "0" #Debug errors. Set to 0 to disable, set to 1 to enable.

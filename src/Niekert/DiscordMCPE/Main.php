@@ -67,9 +67,9 @@ class Main extends PluginBase implements Listener{
 	}
 	
 	public function onChat(PlayerChatEvent $event){
+		$message = $event->getMessage();
+		$sender = $event->getPlayer();
 		if($this->chatprefix !== "0"){
-			$message = $event->getMessage();
-			$sender = $event->getPlayer();
 			$format = str_replace(array('{player}', '{message}'), array($sender->getName(), ltrim($message, $this->chatprefix)), $this->chatformat);
 			if(substr($message, 0, 1 ) === $this->chatprefix){
 				$event->setCancelled(true);
@@ -81,6 +81,10 @@ class Main extends PluginBase implements Listener{
 					$sender->sendMessage(TextFormat::RED."Discord message wasn't send.");
 				}
 			}
+		}
+		if($this->chatopt !== "0"){
+			$format = str_replace(array('{player}', '{message}'), array($sender->getName(), $message), $this->chatformat);
+			$this->send($format, $this->chatuser, $this->chaturl);
 		}
 	}
 	
@@ -122,6 +126,7 @@ class Main extends PluginBase implements Listener{
 		$this->chaturlopt = $this->getConfig()->get("chat_url");
 		$this->chatformat = $this->getConfig()->get("chat_format");
 		$this->chatprefix = $this->getConfig()->get("chat_prefix");
+		$this->chatopt = $this->getConfig()->get("chat");
 		
 			//Some statements
 			//I'm to lazy to set a message for all options :)
