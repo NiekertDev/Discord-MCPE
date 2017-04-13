@@ -28,7 +28,9 @@ class Main extends PluginBase implements Listener{
 		$this->setvars();
 		
 				if($this->startupopt !== "0" AND $this->webhook !== "" AND $this->botusername !== "" AND $this->startupopt !== ""){
-					$this->send($this->startupopt, $this->botusername);
+					$task = new SendMessage($this, $this->startupopt, $this->botusername);
+					$this->getServer()->getScheduler()->scheduleAsyncTask($task);
+					$this->getLogger()->info(TextFormat::GREEN.'' . $task->error);
 						if($this->error === "0"){
 							$this->getLogger()->info(TextFormat::GREEN.'Check your Discord Server now :)');
 						}
@@ -149,34 +151,7 @@ class Main extends PluginBase implements Listener{
 			}
 	}
 
-	function send($message, $username, $webhook = ""){
-		if($webhook === ""){
-			$webhook = $this->webhook;
-		}
-		$data = array("content" => $message, "username" => "$username");
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, $webhook);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-			curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-			$response = curl_exec($curl);
-			$curlerror = curl_error($curl);
-			
-				if($response === false AND $this->debugopt === "1"){
-					$this->getLogger()->error(TextFormat::RED.'ERROR: ' .$curlerror);
-					$error = "1";
-				}
-				
-				elseif($response === false AND $this->debugopt === "0"){
-					$this->getLogger()->warning(TextFormat::RED.'Something strange happened :(. Set the debug option in the config to 1 to show the error.');
-					$error = "1";
-				}
-				
-				elseif($response === ""){
-					$error = "0";
-				}
-			$this->error = $error;
+	public function send($error){
+		$this->error = $error;
 	}
 }
