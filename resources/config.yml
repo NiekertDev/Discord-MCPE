@@ -10,8 +10,9 @@ shutdown_message: "" #Message when server stops. Set to 0 to disable.
 join_message: "" #Message when player joins. {player} can be used. Set to 0 to disable.
 quit_message: "" #Message when player leaves. {player} can be used. Set to 0 to disable.
 death_message: "" #Message when player get killed. {player} can be used. Set to 0 to disable.
-command_format: "[{player}] {message}" #Format the plugin uses when someone says something. {player} and {message} can be used.
+chat_format: "[{player}] {message}" #Format the plugin uses when someone says something. {player} and {message} can be used.
 
 #Options
 command: "1" #Command option. Set to 0 to disable.
+chat_prefix: "!" #Prefix for chat. Set to 0 to disable.
 debug: "0"

@@ -8,6 +8,7 @@ use pocketmine\utils\Config;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerDeathEvent;
+use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\event\Listener;
@@ -26,7 +27,7 @@ class Main extends PluginBase implements Listener{
 		$this->getLogger()->info(TextFormat::GREEN."Plugin enabled");
 		$this->setvars();
 		
-				if($this->startupopt !== "0"){
+				if($this->startupopt !== "0" AND $this->webhook !== "" AND $this->botusername !== "" AND $this->startupopt !== ""){
 					$this->send($this->startupopt, $this->botusername);
 						if($this->error === "0"){
 							$this->getLogger()->info(TextFormat::GREEN.'Check your Discord Server now :)');
@@ -65,6 +66,24 @@ class Main extends PluginBase implements Listener{
 		}
 	}
 	
+	public function onChat(PlayerChatEvent $event){
+		if($this->chatprefix !== "0"){
+			$message = $event->getMessage();
+			$sender = $event->getPlayer();
+			$format = str_replace(array('{player}', '{message}'), array($sender->getName(), ltrim($message, $this->chatprefix)), $this->chatformat);
+			if(substr($message, 0, 1 ) === $this->chatprefix){
+				$event->setCancelled(true);
+				$this->send($format, $this->chatuser, $this->chaturl);
+				if($this->error === "0"){
+					$sender->sendMessage(TextFormat::GREEN."Discord message was send.");
+				}
+				elseif($this->error === "1"){
+					$sender->sendMessage(TextFormat::RED."Discord message wasn't send.");
+				}
+			}
+		}
+	}
+	
 	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
 		if($cmd->getName() == "discord"){
 			if($this->commandopt !== "0"){
@@ -72,7 +91,7 @@ class Main extends PluginBase implements Listener{
 					$sender->sendMessage(TextFormat::RED."Please provide an argument! Usage: /discord (message).");
 				}
 				else{
-					$format = str_replace(array('{player}', '{message}'), array($sender->getName(), implode(" ", $args)), $this->commandformatopt);
+					$format = str_replace(array('{player}', '{message}'), array($sender->getName(), implode(" ", $args)), $this->chatformat);
 					$this->send($format, $this->chatuser, $this->chaturl);
 					if($this->error === "0"){
 						$sender->sendMessage(TextFormat::GREEN."Discord message was send.");
@@ -101,7 +120,8 @@ class Main extends PluginBase implements Listener{
 		$this->debugopt = $this->getConfig()->get("debug");
 		$this->commandopt = $this->getConfig()->get("command");
 		$this->chaturlopt = $this->getConfig()->get("chat_url");
-		$this->commandformatopt = $this->getConfig()->get("command_format");
+		$this->chatformat = $this->getConfig()->get("chat_format");
+		$this->chatprefix = $this->getConfig()->get("chat_prefix");
 		
 			//Some statements
 			//I'm to lazy to set a message for all options :)
