@@ -100,10 +100,10 @@ class Main extends PluginBase implements Listener{
 					$format = str_replace(array('{player}', '{message}'), array($sender->getName(), implode(" ", $args)), $this->chatformat);
 					$this->send($format, $this->chatuser, $this->chaturl);
 					if($this->error === "0"){
-						$sender->sendMessage(TextFormat::GREEN."Discord message was send.");
+						$sender->sendMessage(TextFormat::GREEN."Discord message was sent.");
 					}
 					elseif($this->error === "1"){
-						$sender->sendMessage(TextFormat::RED."Discord message wasn't send.");
+						$sender->sendMessage(TextFormat::RED."Discord message wasn't sent.");
 					}
 				}
 			}
