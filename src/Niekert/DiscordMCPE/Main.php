@@ -28,9 +28,7 @@ class Main extends PluginBase implements Listener{
 		$this->setvars();
 		
 				if($this->startupopt !== "0" AND $this->webhook !== "" AND $this->botusername !== "" AND $this->startupopt !== ""){
-					$task = new SendMessage($this, $this->startupopt, $this->botusername);
-					$this->getServer()->getScheduler()->scheduleAsyncTask($task);
-					$this->getLogger()->info(TextFormat::GREEN.'' . $task->error);
+					$this->send($this->startupopt, $this->botusername);
 						if($this->error === "0"){
 							$this->getLogger()->info(TextFormat::GREEN.'Check your Discord Server now :)');
 						}
@@ -151,7 +149,21 @@ class Main extends PluginBase implements Listener{
 			}
 	}
 
-	public function send($error){
-		$this->error = $error;
+	public function error($error){
+		if($error !== "0"){
+			$this->getLogger()->error(TextFormat::RED.$error);
+			$this->error = "1";
+		}
+		else{
+			$this->error = "0";
+		}
+	}
+	
+	function send($message, $username, $webhook = ""){
+		if($webhook === ""){
+			$webhook = $this->webhook;
+		}
+		$task = new SendMessage($this, $message, $username, $webhook);
+		$this->getServer()->getScheduler()->scheduleAsyncTask($task);
 	}
 }
