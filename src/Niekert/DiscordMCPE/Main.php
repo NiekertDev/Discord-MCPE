@@ -28,8 +28,8 @@ class Main extends PluginBase implements Listener{
 		$this->setvars();
 		
 				if($this->startupopt !== "0" AND $this->webhook !== "" AND $this->botusername !== "" AND $this->startupopt !== ""){
-					$this->send($this->startupopt, $this->botusername);
-						if($this->error === "0"){
+					$response = $this->send($this->startupopt, $this->botusername);
+						if($response){
 							$this->getLogger()->info(TextFormat::GREEN.'Check your Discord Server now :)');
 						}
 				}
@@ -73,11 +73,11 @@ class Main extends PluginBase implements Listener{
 			$format = str_replace(array('{player}', '{message}'), array($sender->getName(), ltrim($message, $this->chatprefix)), $this->chatformat);
 			if(substr($message, 0, 1 ) === $this->chatprefix){
 				$event->setCancelled(true);
-				$this->send($format, $this->chatuser, $this->chaturl);
-				if($this->error === "0"){
+				$response = $this->send($format, $this->chatuser, $this->chaturl);
+				if($response){
 					$sender->sendMessage(TextFormat::GREEN."Discord message was send.");
 				}
-				elseif($this->error === "1"){
+				elseif(!$response){
 					$sender->sendMessage(TextFormat::RED."Discord message wasn't send.");
 				}
 			}
@@ -96,11 +96,11 @@ class Main extends PluginBase implements Listener{
 				}
 				else{
 					$format = str_replace(array('{player}', '{message}'), array($sender->getName(), implode(" ", $args)), $this->chatformat);
-					$this->send($format, $this->chatuser, $this->chaturl);
-					if($this->error === "0"){
+					$response = $this->send($format, $this->chatuser, $this->chaturl);
+					if($response){
 						$sender->sendMessage(TextFormat::GREEN."Discord message was sent.");
 					}
-					elseif($this->error === "1"){
+					elseif(!$response){
 						$sender->sendMessage(TextFormat::RED."Discord message wasn't sent.");
 					}
 				}
@@ -150,13 +150,7 @@ class Main extends PluginBase implements Listener{
 	}
 
 	public function error($error){
-		if($error !== "0"){
 			$this->getLogger()->error(TextFormat::RED.$error);
-			$this->error = "1";
-		}
-		else{
-			$this->error = "0";
-		}
 	}
 	
 	function send($message, $username, $webhook = ""){
@@ -165,5 +159,15 @@ class Main extends PluginBase implements Listener{
 		}
 		$task = new SendMessage($this, $message, $username, $webhook);
 		$this->getServer()->getScheduler()->scheduleAsyncTask($task);
+		if($task){
+			return true
+		}
+		elseif(!$task){
+			return false
+		}
+		//For testing
+		else{
+			$this->getLogger()->error(TextFormat::RED.'oops');
+		}
 	}
 }
