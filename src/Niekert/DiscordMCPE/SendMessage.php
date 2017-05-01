@@ -28,16 +28,16 @@ class SendMessage extends AsyncTask {
 			
 				if($response === false AND $this->main->debugopt === "1"){
 					$this->main->error('ERROR: ' .$curlerror);
-					return false;
+					$this->setResult(false);
 				}
 				
 				elseif($response === false AND $this->main->debugopt === "0"){
 					$this->main->error('Something strange happened :(. Set the debug option in the config to 1 to show the error.');
-					return false
+					$this->setResult(false);
 				}
 				
 				elseif($response === ""){
-				 return true;
+				 $this->setResult(false);
 				}
 	}
 }

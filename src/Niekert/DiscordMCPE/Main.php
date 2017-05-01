@@ -16,7 +16,9 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 
 class Main extends PluginBase implements Listener{
-
+	
+	public $debug_opt;
+	
 	public function onLoad(){
 		$this->getLogger()->info("Plugin loading");
 	}
@@ -160,10 +162,10 @@ class Main extends PluginBase implements Listener{
 		$task = new SendMessage($this, $message, $username, $webhook);
 		$this->getServer()->getScheduler()->scheduleAsyncTask($task);
 		if($task){
-			return true
+			return true;
 		}
 		elseif(!$task){
-			return false
+			return false;
 		}
 		//For testing
 		else{
