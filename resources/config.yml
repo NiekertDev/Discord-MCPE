@@ -1,4 +1,6 @@
 #Status plugin made by Niekert. SO to Thunder33345 for helping with small things.
+version:
+
 webhook_url: "" #Your webhook url.
 chat_url: "" #Webhook url for the /discord command. Set to 0 to use default.
 username: "" #The username the plugin uses.
@@ -13,7 +15,7 @@ death_message: "" #Message when player get killed. {player} can be used. Set to 
 chat_format: "[{player}] {message}" #Format the plugin uses when someone says something. {player} and {message} can be used.
 
 #Options
-command: "1" #Command option. Set to 0 to disable.
-chat_prefix: "!" #Prefix for chat. Set to 0 to disable.
-chat: "0" #Send everything to Discord. EXTREMELY NOT RECOMMENDED! Set to 0 to disable, set to 1 to enable.
-debug: "0" #Debug errors. Set to 0 to disable, set to 1 to enable.
+command: true #Command option. Set to false to disable.
+chat_prefix: "!" #Prefix for chat. Set to false to disable.
+chat: false #Send everything to Discord. EXTREMELY NOT RECOMMENDED! Set to false to disable, set to true to enable.
+debug: false #Debug errors. Set to false to disable, set to true to enable.
