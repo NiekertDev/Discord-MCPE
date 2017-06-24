@@ -22,7 +22,9 @@ class Main extends PluginBase implements Listener{
 		
 	public function onEnable(){
         $this->setvars();
-        if(!$this->isEnabled()) return;
+        if($this->isDisabled()){
+           return;
+        }
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 		$this->getLogger()->info(C::GREEN."Plugin enabled");
         if($this->getConfig()->get("start_message") !== "0"){
@@ -46,13 +48,7 @@ class Main extends PluginBase implements Listener{
 				}
 				else{
 					$format = str_replace(['{player}', '{message}'], [$sender->getName(), implode(" ", $args)], $this->chatformat);
-					$response = $this->sendMessage($this->chaturl, $format, $sender, $this->chatuser);
-					if($response){
-						$sender->sendMessage(C::GREEN."Discord message was sent.");
-					}
-					elseif(!$response){
-						$sender->sendMessage(C::RED."Discord message wasn't sent.");
-					}
+					$this->sendMessage($this->chaturl, $format, $sender, $this->chatuser);
 				}
 			}
 			else{
@@ -64,7 +60,7 @@ class Main extends PluginBase implements Listener{
 	
 	private function setvars(){
     	$this->saveDefaultConfig();
-	    if(key_exists("version", $this->getConfig()->getAll())){
+	    if(key_exists("Version", $this->getConfig()->getAll())){
 	       if($this->configversion !== $this->getConfig()->get("Version")){
 	           $this->getLogger()->critical("Please update your config!");
 	           $this->setEnabled(false);
@@ -77,7 +73,7 @@ class Main extends PluginBase implements Listener{
             return;
         }
         foreach ($this->getConfig()->getAll() as $item){
-            if(!isset($item) OR ""){
+            if(!isset($item) OR $item === ""){
                 $this->getLogger()->info("Please edit your config");
                 $this->setEnabled(false);
                 return;
