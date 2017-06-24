@@ -12,13 +12,13 @@ webhook_url: ""
 # Your discord webhook url.
 
 chat_url: "" 
-# Webhook url for the /discord command. Set to 0 to use default.
+# Webhook url for the /discord command and when somebody chats. Set to 0 to use default.
 
 username: "" 
 # The username the plugin uses in discord.
 
 chat_username: "" 
-# The username of the plugin when someone says something. Set to 0 to use default.
+# The username of the plugin for /discord and when someone chats. Set to 0 to use default.
 
 chat_format: "[{player}] {message}" 
 # Format in discord that the plugin uses when sending a message. {player} and {message} can be used.
@@ -59,20 +59,20 @@ death_message: ""
 ############################################################
 
 command: "true" 
-# Command option. 
+# Enable/disable "/discord"
 
 chat_prefix: "!" 
-# Prefix for chat
+# Prefix for chat. See README.md for more info.
 
 chat: "false" 
 # Send everything to Discord. Highly recommended to keep this disabled.
 
 debug: "false" 
-# Debug errors.
+# Show error messages. Set to 1 to enable.
 
 #####################################################
 #     UNDER NO CIRCUMSTANCES SHOULD YOU EDIT THE    #
 #                  FOLLOWING LINE!                  #
-version: 
+Version: 
 #     Thank you for not editing the line above!     #
 #####################################################
