@@ -62,6 +62,7 @@ class Main extends PluginBase implements Listener{
 	}
 	
 	private function setvars(){
+    	$this->saveDefaultConfig();
 	    if(key_exists("version", $this->getConfig()->getAll())){
 	       if($this->configversion !== $this->getConfig()->get("Version")){
 	           $this->getLogger()->critical("Please update your config!");
