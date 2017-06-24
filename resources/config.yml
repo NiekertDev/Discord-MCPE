@@ -1,5 +1,5 @@
 #Status plugin made by Niekert. SO to Thunder33345 for helping with small things.
-version:
+Version: "1.0.0
 
 webhook_url: "" #Your webhook url.
 chat_url: "" #Webhook url for the /discord command. Set to 0 to use default.

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Roelof Dell
- * Date: 26-5-2017
- * Time: 23:07
- */
 
 namespace Niekert\DiscordMCPE\Tasks;
 

@@ -2,14 +2,10 @@
 
 namespace Niekert\DiscordMCPE\Events;
 
-
 use Niekert\DiscordMCPE\Main;
 use pocketmine\event\Listener;
 use pocketmine\utils\Config;
-use pocketmine\event\player\PlayerJoinEvent;
-use pocketmine\event\player\PlayerQuitEvent;
-use pocketmine\event\player\PlayerDeathEvent;
-use pocketmine\event\player\PlayerChatEvent;
+use pocketmine\event\player\{PlayerJoinEvent,PlayerQuitEvent, PlayerDeathEvent, PlayerChatEvent};
 
 class EventListener implements Listener
 {
@@ -56,7 +52,7 @@ class EventListener implements Listener
                 $this->main->sendMessage($this->main->chaturl, $format, $sender, $this->main->chatuser);
             }
         }
-        if($this->main->chatopt !== "0"){
+        if($this->main->chatopt){
             $format = str_replace(array('{player}', '{message}'), array($sender->getName(), $message), $this->main->chatformat);
             $this->main->sendMessage($this->main->chaturl, $format, "console", $this->main->chatuser);
         }

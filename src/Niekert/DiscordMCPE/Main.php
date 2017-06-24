@@ -13,19 +13,14 @@ use Niekert\DiscordMCPE\Events\EventListener;
 class Main extends PluginBase implements Listener{
 	
 	public $webhook, $username, $startupopt, $shutdownopt, $joinopt, $quitopt, $deathopt, $debugopt, $commandopt, $chaturl, $chatformat, $chatprefix, $chatopt, $chatuser;
-	
+
+	private $configversion = "1.0.0";
+
 	public function onLoad(){
 		$this->getLogger()->info("Plugin loading");
 	}
 		
 	public function onEnable(){
-        $this->getServer()->getScheduler()->scheduleTask(new Utils\ConfigUpdater($this));
-        foreach ($this->getConfig()->getAll() as $item){
-            if(!isset($item) OR ""){
-                $this->getLogger()->info("Please edit your config");
-                $this->setEnabled(false);
-            }
-        }
         $this->setvars();
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 		$this->getLogger()->info(C::GREEN."Plugin enabled");
@@ -44,12 +39,12 @@ class Main extends PluginBase implements Listener{
 
 	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
 		if($cmd->getName() == "discord"){
-			if($this->commandopt !== "0"){
+			if($this->commandopt){
 				if(!isset($args[0])) {
 					$sender->sendMessage(C::RED."Please provide an argument! Usage: /discord (message).");
 				}
 				else{
-					$format = str_replace(array('{player}', '{message}'), array($sender->getName(), implode(" ", $args)), $this->chatformat);
+					$format = str_replace(['{player}', '{message}'], [$sender->getName(), implode(" ", $args)], $this->chatformat);
 					$response = $this->sendMessage($this->chaturl, $format, $sender, $this->chatuser);
 					if($response){
 						$sender->sendMessage(C::GREEN."Discord message was sent.");
@@ -66,7 +61,26 @@ class Main extends PluginBase implements Listener{
 	return true;
 	}
 	
-	function setvars(){
+	private function setvars(){
+	    if(key_exists("version", $this->getConfig()->getAll())){
+	       if($this->configversion !== $this->getConfig()->get("Version")){
+	           $this->getLogger()->critical("Please update your config!");
+	           $this->setEnabled(false);
+	           return;
+           }
+        }
+        else{
+            $this->getLogger()->critical("Please update your config!");
+            $this->setEnabled(false);
+            return;
+        }
+        foreach ($this->getConfig()->getAll() as $item){
+            if(!isset($item) OR ""){
+                $this->getLogger()->info("Please edit your config");
+                $this->setEnabled(false);
+                return;
+            }
+        }
 		$this->reloadConfig();
 		$this->webhook = $this->getConfig()->get("webhook_url");
 		$this->username = $this->getConfig()->get("username");
