@@ -22,6 +22,7 @@ class Main extends PluginBase implements Listener{
 		
 	public function onEnable(){
         $this->setvars();
+        if(!$this->isEnabled()) return;
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 		$this->getLogger()->info(C::GREEN."Plugin enabled");
         if($this->getConfig()->get("start_message") !== "0"){
