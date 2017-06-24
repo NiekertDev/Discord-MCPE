@@ -1,4 +1,5 @@
-#Discord-MCPE
+# Discord-MCPE
+
 #####
 
 ![Discord-MCPE Logo](/images/logo.png)
@@ -7,14 +8,14 @@
 
 Connect your PocketMine server with Discord&trade;!
 
-##Installing:
+## Installing:
 1. Download phar from [Poggit&trade;](https://poggit.pmmp.io/ci/NiekertDev/Discord-MCPE)
 2. Put it in /plugins folder
 3. Start server
 4. Edit config
 5. Reload server
 
-##Config:
+## Config:
 webhook_url: Your discord webhook url.
 
 chat_url: Webhook url for the /discord command and when somebody chats. Set to 0 to use default.
@@ -43,7 +44,7 @@ chat: Send everything to Discord. Recommended to keep this disabled, but it can 
 
 debug: Show error messages.
 
-##Making an Discord&trade; webhook:
+## Making an Discord&trade; webhook:
 1. Open Discord
 2. Go to your server
 3. Make a new chat channel / Open one
