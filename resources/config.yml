@@ -58,16 +58,16 @@ death_message: ""
 #       Tip: Set any of these to true to enable them       #
 ############################################################
 
-command: "true" 
+command: true
 # Enable/disable "/discord"
 
 chat_prefix: "!" 
 # Prefix for chat. See README.md for more info.
 
-chat: "false" 
-# Send everything to Discord. Highly recommended to keep this disabled.
+chat: false
+# Send everything to Discord. Recommended to keep this disabled, but it can be used.
 
-debug: "false" 
+debug: false
 # Show error messages. Set to 1 to enable.
 
 #####################################################
