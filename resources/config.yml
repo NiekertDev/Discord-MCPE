@@ -1,19 +1,70 @@
-#Status plugin made by Niekert. SO to Thunder33345 for helping with small things.
-webhook_url: "" #Your webhook url.
-chat_url: "" #Webhook url for the /discord command. Set to 0 to use default.
-username: "" #The username the plugin uses.
-chat_username: "" #The username of the plugin when someone says something. Set to 0 to use default.
+############################################################
+#                       Discord-MCPE                       #
+#                        By: Niekert                       #
+#                         Support:                         #
+#   https://github.com/NiekertDev/Discord-MCPE/issues/new  #
+#   Credit to Thunder33345 for helping with small things   #
+#         Credit to TheRoyalBlock for config design        #
+#               Main options section (below)               #
+############################################################
 
-#Messages
-start_message: "" #Message when server starts. Set to 0 to disable.
-shutdown_message: "" #Message when server stops. Set to 0 to disable.
-join_message: "" #Message when player joins. {player} can be used. Set to 0 to disable.
-quit_message: "" #Message when player leaves. {player} can be used. Set to 0 to disable.
-death_message: "" #Message when player get killed. {player} can be used. Set to 0 to disable.
-chat_format: "[{player}] {message}" #Format the plugin uses when someone says something. {player} and {message} can be used.
+webhook_url: ""
+# Your discord webhook url.
 
-#Options
-command: "1" #Command option. Set to 0 to disable.
-chat_prefix: "!" #Prefix for chat. Set to 0 to disable.
-chat: "0" #Send everything to Discord. EXTREMELY NOT RECOMMENDED! Set to 0 to disable, set to 1 to enable.
-debug: "0" #Debug errors. Set to 0 to disable, set to 1 to enable.
+chat_url: "" 
+# Webhook url for the /discord command and when somebody chats. Set to 0 to use default.
+
+username: "" 
+# The username the plugin uses in discord.
+
+chat_username: "" 
+# The username of the plugin for /discord and when someone chats. Set to 0 to use default.
+
+chat_format: "[{player}] {message}" 
+# Format in discord that the plugin uses when sending a message. {player} and {message} can be used.
+
+
+
+############################################################
+#                     Messages on Event                    #
+#   These messages are triggered on an event such as when  #
+#   the server starts or stops, or when a player joins or  #
+#             leaves. Also when a player dies.             #
+#        Tip: Set any of these to 0 to disable them        #
+############################################################
+
+start_message: "" 
+# Message sent when server starts.
+
+shutdown_message: "" 
+# Message sent when server stops.
+
+join_message: "" 
+# Message sent when player joins. {player} can be used.
+
+quit_message: "" 
+# Message sent when player leaves. {player} can be used.
+
+death_message: "" 
+# Message sent when player get killed. {player} can be used.
+
+
+
+############################################################
+#                       Other Options                      #
+#  It is not recommended that you change these, especially #
+#         if you do not understand what they mean.         #
+#        Tip: Set any of these to 0 to disable them        #
+############################################################
+
+command: "1" 
+# Enable/disable "/discord"
+
+chat_prefix: "!" 
+# Prefix for chat. See README.md for more info.
+
+chat: "0" 
+# Send everything to Discord. Highly recommended to keep this disabled. Set to 1 to enable.
+
+debug: "0" 
+# Show error messages. Set to 1 to enable.
