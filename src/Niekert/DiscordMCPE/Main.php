@@ -16,7 +16,7 @@ class Main extends PluginBase implements Listener{
 
 	private $configversion = "1.0.0";
 
-	public function onLoad(){
+    public function onLoad(){
 		$this->getLogger()->info("Plugin loading");
 	}
 		
@@ -28,8 +28,7 @@ class Main extends PluginBase implements Listener{
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 		$this->getLogger()->info(C::GREEN."Plugin enabled");
         if($this->getConfig()->get("start_message") !== "0"){
-            $player = new ConsoleCommandSender();
-            $this->sendMessage($this->webhook, $this->startupopt, $player);
+            $this->sendMessage($this->webhook, $this->startupopt, "CONSOLE");
         }
 	}
 	
@@ -40,7 +39,14 @@ class Main extends PluginBase implements Listener{
 		}
     }
 
-	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
+    /**
+     * @param CommandSender $sender
+     * @param Command $cmd
+     * @param string $label
+     * @param array $args
+     * @return bool
+     */
+    public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
 		if($cmd->getName() == "discord"){
 			if($this->commandopt){
 				if(!isset($args[0])) {
@@ -48,7 +54,7 @@ class Main extends PluginBase implements Listener{
 				}
 				else{
 					$format = str_replace(['{player}', '{message}'], [$sender->getName(), implode(" ", $args)], $this->chatformat);
-					$this->sendMessage($this->chaturl, $format, $sender, $this->chatuser);
+					$this->sendMessage($this->chaturl, $format, $sender->getName(), $this->chatuser);
 				}
 			}
 			else{
@@ -109,27 +115,43 @@ class Main extends PluginBase implements Listener{
 	}
 
 	public function notify($player, $result){
-        if($player === "console"){ //If no player is specified
+        if($player === "nolog"){
             return;
         }
+        elseif ($player === "CONSOLE"){
+            $player = new ConsoleCommandSender();
+        }
         else{
-            if($result["success"]) {
-                $player->sendMessage(C::AQUA."[Discord-MCPE] ".C::GREEN."Discord message was send!");
+            $playerinstance = $this->getServer()->getPlayerExact($player);
+            if ($playerinstance === null){
                 return;
             }
             else{
-                if($this->getConfig()->get("debug")){
-                    $this->getLogger()->error(C::RED."Error: ".$result["Error"]);
-                }
-                else{
-                    $this->getLogger()->warning(C::RED."Something strange happened. Set debug in config to true to get error message");
-                }
-                $player->sendMessage(C::AQUA."[Discord-MCPE] ".C::GREEN."Discord message wasn't send!");
+                $player = $playerinstance;
             }
         }
+        if($result["success"]) {
+            $player->sendMessage(C::AQUA."[Discord-MCPE] ".C::GREEN."Discord message was send!");
+        }
+        else{
+            if($this->getConfig()->get("debug")){
+                $this->getLogger()->error(C::RED."Error: ".$result["Error"]);
+            }
+            else{
+                $this->getLogger()->warning(C::RED."Something strange happened. Set debug in config to true to get error message");
+            }
+            $player->sendMessage(C::AQUA."[Discord-MCPE] ".C::GREEN."Discord message wasn't send!");
+        }
+
     }
 
-    public function sendMessage($webhook, $message, $player = "console", $username = null){
+    /**
+     * @param $webhook
+     * @param $message
+     * @param string $player
+     * @param null $username
+     */
+    public function sendMessage($webhook, $message, string $player = "nolog", $username = null){
 	    if(!isset($username)){
 	        $username = $this->username;
         }
@@ -137,6 +159,6 @@ class Main extends PluginBase implements Listener{
 	        "content" => $message,
             "username" => $username
         ];
-        $this->getServer()->getScheduler()->scheduleAsyncTask(new Tasks\SendTaskAsync($player, $webhook, $curlopts));
+        $this->getServer()->getScheduler()->scheduleAsyncTask(new Tasks\SendTaskAsync($player, $webhook, serialize($curlopts)));
     }
 }

@@ -9,17 +9,26 @@ use pocketmine\Server;
 class SendTaskAsync extends AsyncTask
 {
     private $player, $webhook, $curlopts;
-    public function __construct($player,$webhook,$curlopts)
+
+    /**
+     * SendTaskAsync constructor.
+     * @param $player
+     * @param $webhook
+     * @param $curlopts
+     */
+    public function __construct($player, $webhook, $curlopts)
     {
+        parent::__construct();
         $this->player = $player;
         $this->webhook = $webhook;
         $this->curlopts = $curlopts;
     }
+
     public function onRun()
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $this->webhook);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($this->curlopts));
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(unserialize($this->curlopts)));
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -43,6 +52,9 @@ class SendTaskAsync extends AsyncTask
         $this->setResult($result, true);
     }
 
+    /**
+     * @param Server $server
+     */
     public function onCompletion(Server $server)
     {
         $plugin = $server->getPluginManager()->getPlugin('Discord-MCPE');
