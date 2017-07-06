@@ -2,7 +2,7 @@
 branches:
 - master
 projects:
-  Discord-MCPE:
-    path: ""
-    icon: logo.png 
+	Discord-MCPE:
+		path: ""
+		icon: icon.png
 ...
