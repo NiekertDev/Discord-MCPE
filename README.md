@@ -2,7 +2,7 @@
 
 #####
 
-![Discord-MCPE Logo](/logo.png)
+![Discord-MCPE Logo](logo.png)
 
 [<img src="https://poggit.pmmp.io/ci.shield/NiekertDev/Discord-MCPE/~" width="100" height="25" />](https://poggit.pmmp.io/ci/niekmussche/Discord-MCPE/Discord-MCPE)
 

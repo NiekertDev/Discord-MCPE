@@ -1,8 +1,9 @@
 --- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/niekmussche/Discord-MCPE
 branches:
 - master
-projects:
+projects: 
 	Discord-MCPE:
 		path: ""
+		model: default
 		icon: icon.png
 ...
