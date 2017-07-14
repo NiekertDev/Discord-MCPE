@@ -3,7 +3,7 @@ branches:
   - master
 projects: 
   Discord-MCPE: 
-    icon: icon.png
+    icon: logo.png
     model: default
     path: ""
 
