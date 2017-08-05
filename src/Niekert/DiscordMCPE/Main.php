@@ -46,7 +46,7 @@ class Main extends PluginBase implements Listener{
      * @param array $args
      * @return bool
      */
-    public function onCommand(CommandSender $sender, Command $cmd, string $label, array $args){
+    public function onCommand(CommandSender $sender, Command $cmd, string $label, array $args): bool{
 		if($cmd->getName() == "discord"){
 			if($this->commandopt){
 				if(!isset($args[0])) {
