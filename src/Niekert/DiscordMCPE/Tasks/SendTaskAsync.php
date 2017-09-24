@@ -18,7 +18,6 @@ class SendTaskAsync extends AsyncTask
      */
     public function __construct($player, $webhook, $curlopts)
     {
-        parent::__construct();
         $this->player = $player;
         $this->webhook = $webhook;
         $this->curlopts = $curlopts;
@@ -66,4 +65,4 @@ class SendTaskAsync extends AsyncTask
         }
         $plugin->notify($this->player, $this->getResult());
     }
-}
+}Jn
