@@ -65,4 +65,4 @@ class SendTaskAsync extends AsyncTask
         }
         $plugin->notify($this->player, $this->getResult());
     }
-}Jn
+}
