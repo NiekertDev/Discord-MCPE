@@ -14,7 +14,7 @@ class Main extends PluginBase implements Listener{
 	
 	public $webhook, $username, $startupopt, $shutdownopt, $joinopt, $quitopt, $deathopt, $debugopt, $commandopt, $chaturl, $chatformat, $chatprefix, $chatopt, $chatuser;
 
-	private $configversion = "1.0.0";
+	private $configversion = "1.0.1";
 
     public function onLoad(){
 		$this->getLogger()->info("Plugin loading");
