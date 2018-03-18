@@ -5,6 +5,7 @@ namespace Niekert\DiscordMCPE\Events;
 use Niekert\DiscordMCPE\Main;
 use pocketmine\event\Listener;
 use pocketmine\utils\Config;
+use pocketmine\utils\TextFormat as C;
 use pocketmine\event\player\{PlayerJoinEvent,PlayerQuitEvent, PlayerDeathEvent, PlayerChatEvent};;
 
 class EventListener implements Listener
@@ -24,7 +25,7 @@ class EventListener implements Listener
     public function onJoin(PlayerJoinEvent $event){
         $playername = $event->getPlayer()->getDisplayName();
         if($this->main->joinopt !== "0"){
-            $this->main->sendMessage($this->webhook, str_replace("{player}",$playername,$this->main->joinopt));
+            $this->main->sendMessage($this->webhook, str_replace("{player}", C::clean($playername), $this->main->joinopt));
         }
     }
 
@@ -34,7 +35,7 @@ class EventListener implements Listener
     public function onQuit(PlayerQuitEvent $event){
         $playername = $event->getPlayer()->getDisplayName();
         if($this->main->quitopt !== "0"){
-            $this->main->sendMessage($this->webhook, str_replace("{player}",$playername,$this->main->quitopt));
+            $this->main->sendMessage($this->webhook, str_replace("{player}", C::clean($playername), $this->main->quitopt));
         }
     }
 
@@ -44,7 +45,7 @@ class EventListener implements Listener
     public function onDeath(PlayerDeathEvent $event){
         $playername = $event->getEntity()->getDisplayName();
         if($this->main->deathopt !== "0"){
-            $this->main->sendMessage($this->webhook, str_replace("{player}",$playername,$this->main->deathopt));
+            $this->main->sendMessage($this->webhook, str_replace("{player}", C::clean($playername), $this->main->deathopt));
         }
     }
 
