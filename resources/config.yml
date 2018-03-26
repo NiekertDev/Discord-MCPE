@@ -23,8 +23,6 @@ chat_username: ""
 chat_format: "[{player}] {message}" 
 # Format in discord that the plugin uses when sending a message. {player} and {message} can be used.
 
-
-
 ############################################################
 #                     Messages on Event                    #
 #   These messages are triggered on an event such as when  #
@@ -48,8 +46,6 @@ quit_message: ""
 death_message: "" 
 # Message sent when player get killed. {player} can be used.
 
-
-
 ############################################################
 #                       Other Options                      #
 #  It is not recommended that you change these, especially #
@@ -67,12 +63,15 @@ chat_prefix: "!"
 chat: false
 # Send everything to Discord. Recommended to keep this disabled, but it can be used.
 
+pureperms: false
+# Support for PurePerms rank names.
+
 debug: false
 # Show error messages. Set to 1 to enable.
 
 #####################################################
 #     UNDER NO CIRCUMSTANCES SHOULD YOU EDIT THE    #
 #                  FOLLOWING LINE!                  #
-Version: "1.0.1"
+Version: "1.0.2"
 #     Thank you for not editing the line above!     #
 #####################################################

@@ -10,13 +10,14 @@ use pocketmine\event\player\{PlayerJoinEvent, PlayerQuitEvent, PlayerDeathEvent,
 
 class EventListener implements Listener
 {
-    private $main, $config, $webhook;
+    private $main, $config, $webhook, $ppa;
 
     public function __construct(Main $plugin)
     {
         $this->main = $plugin;
         $this->config = new Config($this->main->getDataFolder() . "config.yml", Config::YAML, array());
         $this->webhook = $this->config->get("webhook_url");
+        $this->ppa = $this->main->getServer()->getPluginManager()->getPlugin('PurePerms');
     }
 
     /**
@@ -26,7 +27,11 @@ class EventListener implements Listener
     {
         $playername = $event->getPlayer()->getDisplayName();
         if ($this->main->joinopt !== "0") {
-            $this->main->sendMessage($this->webhook, str_replace("{player}", C::clean($playername), $this->main->joinopt));
+            if ($this->main->pp == true){
+                $this->main->sendMessage($this->webhook, str_replace("{player}", $this->ppa->getUserDataMgr()->getGroup($playername), C::clean($playername), $this->main->joinopt));
+            } else {
+                $this->main->sendMessage($this->webhook, str_replace("{player}", C::clean($playername), $this->main->joinopt));
+            }
         }
     }
 

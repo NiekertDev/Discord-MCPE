@@ -13,9 +13,9 @@ use Niekert\DiscordMCPE\Events\EventListener;
 class Main extends PluginBase implements Listener
 {
 
-    public $webhook, $username, $startupopt, $shutdownopt, $joinopt, $quitopt, $deathopt, $debugopt, $commandopt, $chaturl, $chatformat, $chatprefix, $chatopt, $chatuser;
+    public $webhook, $username, $startupopt, $shutdownopt, $joinopt, $quitopt, $deathopt, $debugopt, $commandopt, $chaturl, $chatformat, $chatprefix, $chatopt, $chatuser, $pp;
 
-    private $configversion = "1.0.1";
+    private $configversion = "1.0.2";
 
     public function onLoad()
     {
@@ -27,6 +27,13 @@ class Main extends PluginBase implements Listener
         $this->setvars();
         if ($this->isDisabled()) {
             return;
+        }
+        if ($this->pp == true) {
+            if ($this->getServer()->getPluginManager()->getPlugin('PurePerms') == true) {
+                $this->getServer()->getLogger()->info(C::GREEN . 'PurePerms Compatibility Enabled!');
+            } else {
+                $this->getServer()->getLogger()->info(C::RED . 'PurePerms Compatibility Enabled, but PurePerms could not be found!');
+            }
         }
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
         $this->getLogger()->info(C::GREEN . "Plugin enabled");
@@ -101,6 +108,7 @@ class Main extends PluginBase implements Listener
         $this->chatformat = $this->getConfig()->get("chat_format");
         $this->chatprefix = $this->getConfig()->get("chat_prefix");
         $this->chatopt = $this->getConfig()->get("chat");
+        $this->pp = $this->getConfig()->get("pureperms");
 
         //Some statements
         if ($this->getConfig()->get("chat_username") === "0") {
