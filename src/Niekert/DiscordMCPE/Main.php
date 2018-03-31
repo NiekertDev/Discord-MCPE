@@ -3,6 +3,7 @@
 namespace Niekert\DiscordMCPE;
 
 use pocketmine\command\ConsoleCommandSender;
+use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat as C;
 use pocketmine\event\Listener;
@@ -30,13 +31,13 @@ class Main extends PluginBase implements Listener
         }
         if ($this->pp == true) {
             if ($this->getServer()->getPluginManager()->getPlugin('PurePerms') == true) {
-                $this->getServer()->getLogger()->info(C::GREEN . 'PurePerms Compatibility Enabled!');
+                $this->getServer()->getLogger()->info('[Discord-MCPE] ' . C::GREEN . 'PurePerms Compatibility Enabled!');
             } else {
-                $this->getServer()->getLogger()->info(C::RED . 'PurePerms Compatibility Enabled, but PurePerms could not be found!');
+                $this->getServer()->getLogger()->warning('[Discord-MCPE] ' . C::RED . 'PurePerms Compatibility Enabled, but PurePerms could not be found!');
             }
         }
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
-        $this->getLogger()->info(C::GREEN . "Plugin enabled");
+        $this->getLogger()->info(C::GREEN . "Plugin Enabled");
         if ($this->getConfig()->get("start_message") !== "0") {
             $this->sendMessage($this->webhook, $this->startupopt, "CONSOLE");
         }
@@ -61,10 +62,18 @@ class Main extends PluginBase implements Listener
     {
         if ($cmd->getName() == "discord") {
             if ($this->commandopt) {
+                $ppa = $this->getServer()->getPluginManager()->getPlugin('PurePerms');
                 if (!isset($args[0])) {
                     $sender->sendMessage(C::RED . "Please provide an argument! Usage: /discord (message).");
+                } elseif ($this->pp !== null) {
+                    if ($sender instanceof Player) {
+                        $format = str_replace(['{rank}', '{player}', '{message}'], [C::clean($ppa->getUserDataMgr()->getGroup($sender)), $sender->getName(), implode(" ", $args)], $this->chatformat);
+                        $this->sendMessage($this->chaturl, $format, $sender->getName(), $this->chatuser);
+                    } else {
+                        $this->getServer()->getLogger()->notice('[Discord-MCPE] ' . C::RED . 'You cannot execute this command as console!');
+                    }
                 } else {
-                    $format = str_replace(['{player}', '{message}'], [$sender->getName(), implode(" ", $args)], $this->chatformat);
+                    $format = str_replace(['{player}', '{message}'], [C::clean($sender->getName()), implode(" ", $args)], $this->chatformat);
                     $this->sendMessage($this->chaturl, $format, $sender->getName(), $this->chatuser);
                 }
             } else {
@@ -123,6 +132,10 @@ class Main extends PluginBase implements Listener
         }
     }
 
+    /**
+     * @param $player
+     * @param $result
+     */
     public function notify($player, $result)
     {
         if ($player === "nolog") {
@@ -138,7 +151,7 @@ class Main extends PluginBase implements Listener
             }
         }
         if ($result["success"]) {
-            $player->sendMessage(C::AQUA . "[Discord-MCPE] " . C::GREEN . "Discord message was send!");
+            $player->sendMessage(C::AQUA . "[Discord-MCPE] " . C::GREEN . "Discord message was sent!");
         } else {
             if ($this->getConfig()->get("debug")) {
                 $this->getLogger()->error(C::RED . "Error: " . $result["Error"]);
@@ -147,7 +160,6 @@ class Main extends PluginBase implements Listener
             }
             $player->sendMessage(C::AQUA . "[Discord-MCPE] " . C::GREEN . "Discord message wasn't send!");
         }
-
     }
 
     /**

@@ -12,6 +12,10 @@ class EventListener implements Listener
 {
     private $main, $config, $webhook, $ppa;
 
+    /**
+     * EventListener constructor.
+     * @param Main $plugin
+     */
     public function __construct(Main $plugin)
     {
         $this->main = $plugin;
@@ -20,6 +24,7 @@ class EventListener implements Listener
         $this->ppa = $this->main->getServer()->getPluginManager()->getPlugin('PurePerms');
     }
 
+
     /**
      * @param PlayerJoinEvent $event
      */
@@ -27,8 +32,8 @@ class EventListener implements Listener
     {
         $playername = $event->getPlayer()->getDisplayName();
         if ($this->main->joinopt !== "0") {
-            if ($this->main->pp == true){
-                $this->main->sendMessage($this->webhook, str_replace("{player}", $this->ppa->getUserDataMgr()->getGroup($playername), C::clean($playername), $this->main->joinopt));
+            if ($this->main->pp !== null) {
+                $this->main->sendMessage($this->webhook, str_replace("{rank}", C::clean($this->ppa->getUserDataMgr()->getGroup($event->getPlayer())), str_replace("{player}", C::clean($playername), $this->main->joinopt)));
             } else {
                 $this->main->sendMessage($this->webhook, str_replace("{player}", C::clean($playername), $this->main->joinopt));
             }
@@ -42,7 +47,11 @@ class EventListener implements Listener
     {
         $playername = $event->getPlayer()->getDisplayName();
         if ($this->main->quitopt !== "0") {
-            $this->main->sendMessage($this->webhook, str_replace("{player}", C::clean($playername), $this->main->quitopt));
+            if ($this->main->pp !== null) {
+                $this->main->sendMessage($this->webhook, str_replace("{rank}", C::clean($this->ppa->getUserDataMgr()->getGroup($event->getPlayer())), str_replace("{player}", C::clean($playername), $this->main->quitopt)));
+            } else {
+                $this->main->sendMessage($this->webhook, str_replace("{player}", C::clean($playername), $this->main->quitopt));
+            }
         }
     }
 
@@ -53,7 +62,11 @@ class EventListener implements Listener
     {
         $playername = $event->getEntity()->getDisplayName();
         if ($this->main->deathopt !== "0") {
-            $this->main->sendMessage($this->webhook, str_replace("{player}", C::clean($playername), $this->main->deathopt));
+            if ($this->main->pp !== null) {
+                $this->main->sendMessage($this->webhook, str_replace("{rank}", C::clean($this->ppa->getUserDataMgr()->getGroup($event->getPlayer())), str_replace("{player}", C::clean($playername), $this->main->deathopt)));
+            } else {
+                $this->main->sendMessage($this->webhook, str_replace("{player}", C::clean($playername), $this->main->deathopt));
+            }
         }
     }
 
@@ -67,15 +80,28 @@ class EventListener implements Listener
         $sender = $event->getPlayer();
         $chaturl = $this->main->chaturl;
         if ($this->main->chatprefix !== "0") {
-            $format = str_replace(["{player}", "{message}"], [$sender->getName(), ltrim($message, $this->main->chatprefix)], $this->main->chatformat);
-            if (substr($message, 0, 1) === $this->main->chatprefix) {
-                $event->setCancelled();
-                $this->main->sendMessage($chaturl, $format, $sender->getName(), $this->main->chatuser);
+            if ($this->main->pp !== null) {
+                $format = str_replace(["{rank}", "{player}", "{message}"], [C::clean($this->ppa->getUserDataMgr()->getGroup($event->getPlayer())), C::clean($sender->getName()), ltrim($message, $this->main->chatprefix)], $this->main->chatformat);
+                if (substr($message, 0, 1) === $this->main->chatprefix) {
+                    $event->setCancelled();
+                    $this->main->sendMessage($chaturl, $format, $sender->getName(), $this->main->chatuser);
+                }
+            } else {
+                $format = str_replace(["{player}", "{message}"], [C::clean($sender->getName()), ltrim($message, $this->main->chatprefix)], $this->main->chatformat);
+                if (substr($message, 0, 1) === $this->main->chatprefix) {
+                    $event->setCancelled();
+                    $this->main->sendMessage($chaturl, $format, $sender->getName(), $this->main->chatuser);
+                }
             }
-        }
-        if ($this->main->chatopt) {
-            $format = str_replace(array('{player}', '{message}'), array($sender->getName(), $message), $this->main->chatformat);
-            $this->main->sendMessage($chaturl, $format, "nolog", $this->main->chatuser);
+            if ($this->main->chatopt) {
+                if ($this->main->pp !== null) {
+                    $format = str_replace(array('{rank}', '{player}', '{message}'), array(C::clean($this->ppa->getUserDataMgr()->getGroup($event->getPlayer())), C::clean($sender->getName()), $message), $this->main->chatformat);
+                    $this->main->sendMessage($chaturl, $format, "nolog", $this->main->chatuser);
+                } else {
+                    $format = str_replace(array('{player}', '{message}'), array(C::clean($sender->getName()), $message), $this->main->chatformat);
+                    $this->main->sendMessage($chaturl, $format, "nolog", $this->main->chatuser);
+                }
+            }
         }
     }
 }

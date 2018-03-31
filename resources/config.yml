@@ -20,8 +20,8 @@ username: ""
 chat_username: "" 
 # The username of the plugin for /discord and when someone chats. Set to 0 to use default.
 
-chat_format: "[{player}] {message}" 
-# Format in discord that the plugin uses when sending a message. {player} and {message} can be used.
+chat_format: "[{player}] {message}"
+# Format in discord that the plugin uses when sending a message. {rank}, {player}, and {message} can be used.
 
 ############################################################
 #                     Messages on Event                    #
@@ -38,13 +38,13 @@ shutdown_message: ""
 # Message sent when server stops.
 
 join_message: "" 
-# Message sent when player joins. {player} can be used.
+# Message sent when player joins. {player} and {rank} can be used.
 
 quit_message: "" 
-# Message sent when player leaves. {player} can be used.
+# Message sent when player leaves. {player} and {rank} can be used.
 
 death_message: "" 
-# Message sent when player get killed. {player} can be used.
+# Message sent when player get killed. {player} and {rank} can be used.
 
 ############################################################
 #                       Other Options                      #
@@ -64,7 +64,8 @@ chat: false
 # Send everything to Discord. Recommended to keep this disabled, but it can be used.
 
 pureperms: false
-# Support for PurePerms rank names.
+# Support for PurePerms rank names. PurePerms ranks use the prefix {rank}.
+# If not enabled, {rank} tags will only show as {rank}.
 
 debug: false
 # Show error messages. Set to 1 to enable.
