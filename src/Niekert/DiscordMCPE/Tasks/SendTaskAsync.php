@@ -37,15 +37,15 @@ class SendTaskAsync extends AsyncTask
         //Messy code incoming
         $responsejson = json_decode($response, true);
         $success = false;
-        $error = "IDK What happened";
-        if ($curlerror != "") {
+        $error = 'IDK What happened';
+        if ($curlerror != '') {
             $error = $curlerror;
         } elseif (curl_getinfo($curl, CURLINFO_HTTP_CODE) != 204) {
             $error = $responsejson['message'];
-        } elseif (curl_getinfo($curl, CURLINFO_HTTP_CODE) == 204 OR $response === "") {
+        } elseif (curl_getinfo($curl, CURLINFO_HTTP_CODE) == 204 OR $response === '') {
             $success = true;
         }
-        $result = ["Response" => $response, "Error" => $error, "success" => $success];
+        $result = ['Response' => $response, 'Error' => $error, 'success' => $success];
         $this->setResult($result, true);
     }
 
