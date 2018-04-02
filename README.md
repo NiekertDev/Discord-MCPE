@@ -44,7 +44,7 @@ chat: Send everything to Discord. Recommended to keep this disabled, but it can 
 
 debug: Show error messages.
 
-## Making an Discord&trade; webhook:
+## Making a Discord&trade; webhook:
 1. Open Discord
 2. Go to your server
 3. Make a new chat channel / Open one
