@@ -37,17 +37,15 @@ class SendTaskAsync extends AsyncTask
         //Messy code incoming
         $responsejson = json_decode($response, true);
         $success = false;
-        $error = "IDK What happened";
-        if($curlerror != ""){
+        $error = 'IDK What happened';
+        if ($curlerror != '') {
             $error = $curlerror;
-        }
-        elseif (curl_getinfo($curl, CURLINFO_HTTP_CODE) != 204) {
+        } elseif (curl_getinfo($curl, CURLINFO_HTTP_CODE) != 204) {
             $error = $responsejson['message'];
-        }
-        elseif (curl_getinfo($curl, CURLINFO_HTTP_CODE) == 204 OR $response === ""){
+        } elseif (curl_getinfo($curl, CURLINFO_HTTP_CODE) == 204 OR $response === '') {
             $success = true;
         }
-        $result = ["Response" => $response, "Error" => $error, "success" => $success];
+        $result = ['Response' => $response, 'Error' => $error, 'success' => $success];
         $this->setResult($result, true);
     }
 
@@ -57,10 +55,10 @@ class SendTaskAsync extends AsyncTask
     public function onCompletion(Server $server)
     {
         $plugin = $server->getPluginManager()->getPlugin('Discord-MCPE');
-        if(!$plugin instanceof Main){
+        if (!$plugin instanceof Main) {
             return;
         }
-        if(!$plugin->isEnabled()){
+        if (!$plugin->isEnabled()) {
             return;
         }
         $plugin->notify($this->player, $this->getResult());
