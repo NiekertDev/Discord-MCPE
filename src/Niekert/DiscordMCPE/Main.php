@@ -18,11 +18,6 @@ class Main extends PluginBase implements Listener
 
     private $configversion = '1.0.2';
 
-    public function onLoad()
-    {
-        $this->getLogger()->info('Plugin Loading');
-    }
-
     public function onEnable()
     {
         $this->setvars();
@@ -31,13 +26,12 @@ class Main extends PluginBase implements Listener
         }
         if ($this->pp == true) {
             if ($this->getServer()->getPluginManager()->getPlugin('PurePerms') == true) {
-                $this->getServer()->getLogger()->info('[Discord-MCPE] ' . C::GREEN . 'PurePerms Compatibility Enabled!');
+                $this->getServer()->getLogger()->info('[Discord-MCPE] PurePerms Compatibility Enabled!');
             } else {
                 $this->getServer()->getLogger()->warning('[Discord-MCPE] ' . C::RED . 'PurePerms Compatibility Enabled, but PurePerms could not be found!');
             }
         }
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
-        $this->getLogger()->info(C::GREEN . 'Plugin Enabled');
         if ($this->getConfig()->get('start_message') !== '0') {
             $this->sendMessage($this->webhook, $this->startupopt, 'CONSOLE');
         }
@@ -45,7 +39,6 @@ class Main extends PluginBase implements Listener
 
     public function onDisable()
     {
-        $this->getLogger()->info(C::RED . 'Plugin Disabled');
         if ($this->shutdownopt !== '0' AND !$this->isEnabled()) {
             $this->sendMessage($this->webhook, $this->shutdownopt);
         }
