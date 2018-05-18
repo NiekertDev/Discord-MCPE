@@ -28,7 +28,7 @@ class Main extends PluginBase implements Listener
             if ($this->getServer()->getPluginManager()->getPlugin('PurePerms') == true) {
                 $this->getServer()->getLogger()->info('[Discord-MCPE] PurePerms Compatibility Enabled!');
             } else {
-                $this->getServer()->getLogger()->warning('[Discord-MCPE] ' . C::RED . 'PurePerms Compatibility Enabled, but PurePerms could not be found!');
+                $this->getServer()->getLogger()->warning('[Discord-MCPE] PurePerms Compatibility Enabled, but PurePerms could not be found!');
             }
         }
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
