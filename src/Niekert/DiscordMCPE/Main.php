@@ -26,9 +26,12 @@ class Main extends PluginBase implements Listener
         }
         if ($this->pp == true) {
             if ($this->getServer()->getPluginManager()->getPlugin('PurePerms') == true) {
-                $this->getServer()->getLogger()->info('[Discord-MCPE] PurePerms Compatibility Enabled!');
+                $this->getLogger()->info('PurePerms Compatibility Enabled!');
             } else {
-                $this->getServer()->getLogger()->warning('[Discord-MCPE] PurePerms Compatibility Enabled, but PurePerms could not be found!');
+                $this->getLogger()->alert('PurePerms Compatibility Enabled, but PurePerms could not be found!');
+                $this->getLogger()->alert('Edit your settings in config.yml!');
+                $this->getServer()->getPluginManager()->disablePlugin($this);
+                return false;
             }
         }
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
@@ -63,7 +66,7 @@ class Main extends PluginBase implements Listener
                         $format = str_replace(['{rank}', '{player}', '{message}'], [C::clean($ppa->getUserDataMgr()->getGroup($sender)), $sender->getName(), implode(' ', $args)], $this->chatformat);
                         $this->sendMessage($this->chaturl, $format, $sender->getName(), $this->chatuser);
                     } else {
-                        $this->getServer()->getLogger()->notice('[Discord-MCPE] ' . C::RED . 'You cannot execute this command as console!');
+                        $this->getLogger()->notice('You cannot execute this command as console!');
                     }
                 } else {
                     $format = str_replace(['{player}', '{message}'], [C::clean($sender->getName()), implode(' ', $args)], $this->chatformat);
@@ -170,6 +173,6 @@ class Main extends PluginBase implements Listener
             'content' => $message,
             'username' => $username
         ];
-        $this->getServer()->getScheduler()->scheduleAsyncTask(new Tasks\SendTaskAsync($player, $webhook, serialize($curlopts)));
+        $this->getServer()->getAsyncPool()->submitTask(new Tasks\SendTaskAsync($player, $webhook, serialize($curlopts)));
     }
 }
