@@ -24,8 +24,8 @@ class Main extends PluginBase implements Listener
         if ($this->isDisabled()) {
             return;
         }
-        if ($this->pp == true) {
-            if ($this->getServer()->getPluginManager()->getPlugin('PurePerms') == true) {
+        if ($this->pp) {
+            if ($this->getServer()->getPluginManager()->getPlugin('PurePerms') !== null) {
                 $this->getLogger()->info('PurePerms Compatibility Enabled!');
             } else {
                 $this->getLogger()->alert('PurePerms Compatibility Enabled, but PurePerms could not be found!');
@@ -61,7 +61,7 @@ class Main extends PluginBase implements Listener
                 $ppa = $this->getServer()->getPluginManager()->getPlugin('PurePerms');
                 if (!isset($args[0])) {
                     $sender->sendMessage(C::RED . 'Please provide an argument! Usage: /discord (message).');
-                } elseif ($this->pp !== null) {
+                } elseif ($this->pp) {
                     if ($sender instanceof Player) {
                         $format = str_replace(['{rank}', '{player}', '{message}'], [C::clean($ppa->getUserDataMgr()->getGroup($sender)), $sender->getName(), implode(' ', $args)], $this->chatformat);
                         $this->sendMessage($this->chaturl, $format, $sender->getName(), $this->chatuser);
