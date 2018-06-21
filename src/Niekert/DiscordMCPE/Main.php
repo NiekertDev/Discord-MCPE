@@ -25,7 +25,7 @@ class Main extends PluginBase implements Listener
             return;
         }
         if ($this->pp) {
-            if (is_null(this->getServer()->getPluginManager()->getPlugin('PurePerms'))) {
+            if (is_null($this->getServer()->getPluginManager()->getPlugin('PurePerms'))) {
                 $this->getLogger()->info('PurePerms Compatibility Enabled!');
             } else {
                 $this->getLogger()->alert('PurePerms Compatibility Enabled, but PurePerms could not be found!');
