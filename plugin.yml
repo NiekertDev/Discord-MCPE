@@ -1,10 +1,7 @@
 name: Discord-MCPE
 author: Niekert
-version: "1.0.2"
-api:
-- 3.0.0-ALPHA10
-- 3.0.0-ALPHA11
-- 3.0.0-ALPHA12
+version: "1.0.3"
+api: [3.0.0]
 softdepend: PurePerms
 main: Niekert\DiscordMCPE\Main
 commands:
