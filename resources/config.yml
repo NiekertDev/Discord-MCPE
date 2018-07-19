@@ -65,7 +65,7 @@ chat: false
 
 pureperms: false
 # Support for PurePerms rank names. PurePerms ranks use the prefix {rank}.
-# If not enabled, {rank} tags will show as "{rank}".:stuck_out_tongue::stuck_out_tongue:
+# If not enabled, {rank} tags will show as "{rank}".
 
 debug: false
 # Show error messages. Set to 1 to enable.
