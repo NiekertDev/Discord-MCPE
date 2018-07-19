@@ -42,6 +42,8 @@ chat_prefix: Prefix for chat. When "!" and someone says !Hello, Hello is send to
 
 chat: Send everything to Discord. Recommended to keep this disabled, but it can be used.
 
+pureperms: Support for PurePerms rank names. PurePerms ranks use the prefix {rank}. If not enabled, {rank} tags will show as "{rank}".
+
 debug: Show error messages.
 
 ## Making a Discord&trade; webhook:
